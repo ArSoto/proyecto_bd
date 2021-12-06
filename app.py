@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 #
 from database import Database
 from graficos import graficos
-from jugador import jugador
+from medico import medico
 from equipo import equipo
 class App: 
     def __init__(self, db):
@@ -18,7 +18,7 @@ class App:
         
         # Algunas especificaciones de tamaño y título de la ventana
         self.root.geometry("700x400")
-        self.root.title("APP Players")
+        self.root.title("Vet patitas")
         
         #
         self.__crea_menubar()
@@ -40,7 +40,7 @@ class App:
         
         #
         maestros_menu = Menu(menubar, tearoff=False)
-        maestros_menu.add_command (label='Equipos', 
+        maestros_menu.add_command (label='Medicos',
                                 command=self.__mostrar_equipos)
         
         #
@@ -56,15 +56,19 @@ class App:
         frame = LabelFrame(self.root, text="", relief=tk.GROOVE)
         frame.place(x=10, y=10, width=200, relheight=0.95) 
         
-        #
-        b1 = Button(frame, text="Jugadores", width=20)
+        # boton medicos menu principal
+        b1 = Button(frame, text="Medicos", width=20)
         b1.grid(row=0, column=0, padx=padx, pady=pady)
-        b1.bind('<Button-1>', self.__mostrar_jugadores) 
-        
+        b1.bind('<Button-1>', self.__mostrar_medicos)
+
+        b1 = Button(frame, text="Jaulas", width=20)
+        b1.grid(row=0, column=0, padx=padx, pady=pady)
+        b1.bind('<Button-1>', self.__mostrar_medicos)
+
         #
-        b2 = Button(frame, text="Gráfico", width=20)
-        b2.grid(row=1, column=0, padx=padx, pady=pady)
-        b2.bind('<Button-1>', self.__graficos)
+        bg = Button(frame, text="Gráfico", width=20)
+        bg.grid(row=1, column=0, padx=padx, pady=pady)
+        bg.bind('<Button-1>', self.__graficos)
     
     # imagen principal.
     def __agrega_imagen_principal(self):
@@ -84,8 +88,8 @@ class App:
         equipo(self.root, self.db)
     
     # muestra ventana jugadores.
-    def __mostrar_jugadores(self, button):
-        jugador(self.root, self.db)
+    def __mostrar_medicos(self, button):
+        medico(self.root, self.db)
     
     def __graficos(self, button):
         graficos(self.root, self.db)

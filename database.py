@@ -5,7 +5,7 @@ class Database:
         self.cursor = None
         try:#Intenta conectarse a la base de datos
             self.db = mysql.connector.connect(host="localhost", 
-                user="test", passwd="test", database="db_test1")
+                user="vet", passwd="vet", database="veterinaria")
             self.cursor = self.db.cursor()
             print("Conectado exitosamente")
         except mysql.connector.Error as err:#Si no puede, avisa
@@ -14,9 +14,9 @@ class Database:
             exit()#Termina la aplicación
             
     def run_select(self, sql):#Función que corre un select
-        #sql se un string con un select en lenguaje sql
+        #sql es un string con un select en lenguaje sql
         try:
-            self.cursor.execute(sql)#ejecuta
+            self.cursor.execute(sql) #ejecuta
             result = self.cursor.fetchall() #Guarda el resultado en result
         except mysql.connector.Error as err:#Si no resulta, avisa
             print("No se pueden obtener los datos")
