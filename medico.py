@@ -25,8 +25,8 @@ class medico:
         self.treeview = ttk.Treeview(self.root)
         self.treeview.configure(columns=("#1", "#2"))
         self.treeview.heading("#0", text="Id")
-        self.treeview.heading("#1", text="Jugador")
-        self.treeview.heading("#2", text="Equipo")
+        self.treeview.heading("#1", text="Nombre")
+        self.treeview.heading("#2", text="Apellido")
         self.treeview.column("#0", minwidth=100, width=100, stretch=False)
         self.treeview.column("#1", minwidth=300, width=300, stretch=False)
         self.treeview.column("#2", minwidth=300, width=300, stretch=False)
@@ -38,35 +38,37 @@ class medico:
         tk.Button(self.root, text="Insertar Medico",
                   command=self.__insertar_medico).place(x=0, y=350, width=200, height=50)
         tk.Button(self.root, text="Modificar jugador",
-                  command=self.__modificar_jugador).place(x=200, y=350, width=200, height=50)
+                  command=self.__modificar_medico).place(x=200, y=350, width=200, height=50)
         tk.Button(self.root, text="Eliminar jugador",
                   command=self.__eliminar_jugador).place(x=400, y=350, width=200, height=50)
         tk.Button(self.root, text="Ver equipos",
                   command=self.__ver_equipos).place(x=600, y=350, width=100, height=50)
 
+#select  a la base de datos para obtener id, nombre, apellido, fecha ingreso del medico
     def llenar_treeview_medico(self):
         sql = """select id_medico, nom_med, ape_med
         from medico;"""
+        #obtiene los datos
         data = self.db.run_select(sql)
+        print(data)
 
         if (data != self.data):
             self.treeview.delete(*self.treeview.get_children())  # Elimina todos los rows del treeview
             for i in data:
                 self.treeview.insert("", "end", text=i[0],
-                                     values=(i[1] + " " + i[2], i[3]), iid=i[0], tags="rojo")
+                                     values=(i[1] + " " + i[2]), iid=i[0], tags="rojo")
             self.data = data
 
     def __insertar_medico(self):
-        insertar_jugador(self.db, self)
+        insertar_medico(self.db, self)
 
-    def __modificar_jugador(self):
+    def __modificar_medico(self):
         if (self.treeview.focus() != ""):
-            sql = """select id_jugador, nom_jugador, ape_jugador, equipo.nom_equipo 
-            from jugador join equipo on jugador.id_equipo = equipo.id_equipo 
-            where id_jugador = %(id_jugador)s"""
+            sql = """select id_medico, nom_med, ape_med, fecha_ingreso
+            from medico where id_medico = %(id_medico)s"""
 
-            row_data = self.db.run_select_filter(sql, {"id_jugador": self.treeview.focus()})[0]
-            modificar_jugador(self.db, self, row_data)
+            row_data = self.db.run_select_filter(sql, {"id_medico": self.treeview.focus()})[0]
+            modificar_medico(self.db, self, row_data)
 
     def __eliminar_jugador(self):
         sql = "delete from jugador where id_jugador = %(id_jugador)s"
@@ -77,7 +79,7 @@ class medico:
         equipo(self.db)
 
 
-class insertar_jugador:
+class insertar_medico:
     def __init__(self, db, padre):
         self.padre = padre
         self.db = db
@@ -102,9 +104,9 @@ class insertar_jugador:
         self.entry_nombre.place(x=110, y=10, width=80, height=20)
         self.entry_apellido = tk.Entry(self.insert_datos)
         self.entry_apellido.place(x=110, y=40, width=80, height=20)
-        self.combo = ttk.Combobox(self.insert_datos)
-        self.combo.place(x=110, y=70, width=80, height=20)
-        self.combo["values"], self.ids = self.__fill_combo()
+        self.entry_fecha = tk.Entry(self.insert_datos)
+        self.entry_nombre.place(x=110, y=10, width=80, height=20)
+
 
     def __config_button(self):
         tk.Button(self.insert_datos, text="Aceptar",
@@ -124,7 +126,7 @@ class insertar_jugador:
         self.padre.llenar_treeview_medico()
 
 
-class modificar_jugador:
+class modificar_medico:
     def __init__(self, db, padre, row_data):
         self.padre = padre
         self.db = db
@@ -137,13 +139,13 @@ class modificar_jugador:
 
     def config_window(self):  # Settings
         self.insert_datos.geometry('200x120')
-        self.insert_datos.title("Modificar jugador")
+        self.insert_datos.title("Modificar medico")
         self.insert_datos.resizable(width=0, height=0)
 
     def config_label(self):  # Labels
         tk.Label(self.insert_datos, text="Nombre: ").place(x=10, y=10, width=80, height=20)
         tk.Label(self.insert_datos, text="Apellido: ").place(x=10, y=40, width=80, height=20)
-        tk.Label(self.insert_datos, text="Equipo: ").place(x=10, y=70, width=80, height=20)
+        tk.Label(self.insert_datos, text="fecha in: ").place(x=10, y=70, width=80, height=20)
 
     def config_entry(self):  # Se configuran los inputs
         self.entry_nombre = tk.Entry(self.insert_datos)
