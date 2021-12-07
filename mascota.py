@@ -45,7 +45,7 @@ class mascota:
         tk.Button(self.root, text="Modificar Mascota",
                   command=self.__modificar).place(x=200, y=350, width=200, height=50)
         tk.Button(self.root, text="Eliminar Mascota",
-                  command=self.__eliminar_jugador).place(x=400, y=350, width=200, height=50)
+                  command=self.__eliminar).place(x=400, y=350, width=200, height=50)
 
     # select  a la base de datos para obtener id, nombre, apellido, fecha ingreso del medico
     def llenar_treeview(self):
