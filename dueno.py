@@ -50,7 +50,7 @@ class dueno:
 
     # select  a la base de datos para obtener id, nombre, apellido, fecha ingreso del medico
     def llenar_treeview(self):
-        sql = """select id_dueno, nom_due,ape_due, telefono, direccion, email 
+        sql = """select id_dueno, nom_due,ape_due,convert( telefono, char), direccion, email 
         from dueno;"""
         # obtiene los datos
         data = self.db.run_select(sql)
@@ -69,15 +69,15 @@ class dueno:
 
     def __modificar(self):
         if (self.treeview.focus() != ""):
-            sql = """select id_medico, nom_med, ape_med, fecha_ingreso
-            from medico where id_medico = %(id_medico)s"""
+            sql = """select id_dueno, nom_due,ape_due,convert( telefono, char), direccion, email 
+        from dueno;"""
 
-            row_data = self.db.run_select_filter(sql, {"id_medico": self.treeview.focus()})[0]
-            modificar_medico(self.db, self, row_data)
+            row_data = self.db.run_select_filter(sql, {"id_due": self.treeview.focus()})[0]
+            modificar(self.db, self, row_data)
 
     def __eliminar_jugador(self):
-        sql = "delete from medico where id_medico = %(id_med)s"
-        self.db.run_sql(sql, {"id_med": self.treeview.focus()})
+        sql = "delete from dueno where id_dueno = %(id_dueno)s"
+        self.db.run_sql(sql, {"id_dueno": self.treeview.focus()})
         self.llenar_treeview()
 
 
@@ -112,8 +112,8 @@ class insertar:
         self.entry_telefono.place(x=110, y=70, width=200, height=20)
         self.entry_direccion = tk.Entry(self.insert_datos)
         self.entry_direccion.place(x=110, y=100, width=200, height=20)
-        self.entry_mail = tk.Entry(self.insert_datos)
-        self.entry_mail.place(x=110, y=130, width=200, height=20)
+        self.entry_email = tk.Entry(self.insert_datos)
+        self.entry_email.place(x=110, y=130, width=200, height=20)
 
 
     def __config_button(self):
@@ -123,15 +123,16 @@ class insertar:
 
 
     def __insertar(self):  # Insercion en la base de datos.
-        sql = """insert medico (nom_med, ape_med, fecha_ingreso ) 
-            values (%(nom_med)s, %(ape_med)s, %(fecha_ingreso)s)"""
-        self.db.run_sql(sql, {"nom_med": self.entry_nombre.get(), "ape_med": self.entry_apellido.get(),
-                              "fecha_ingreso": self.entry_fecha.get()})
+        sql = """insert into dueno (nom_due, ape_due, telefono,direccion, email ) 
+            values (%(nom_due)s, %(ape_due)s, %(telefono)s, %(direccion)s, %(email)s)"""
+        self.db.run_sql(sql, {"nom_due": self.entry_nombre.get(), "ape_due": self.entry_apellido.get(),
+                              "telefono": self.entry_telefono.get(), "direccion": self.entry_direccion.get(),
+                              "email": self.entry_email.get() })
         self.insert_datos.destroy()
         self.padre.llenar_treeview()
 
 
-class modificar_medico:
+class modificar:
     def __init__(self, db, padre, row_data):
         self.padre = padre
         self.db = db
@@ -143,35 +144,45 @@ class modificar_medico:
         self.config_button()
 
     def config_window(self):  # Settings
-        self.insert_datos.geometry('200x120')
+        self.insert_datos.geometry('350x200')
         self.insert_datos.title("Modificar Medico")
         self.insert_datos.resizable(width=0, height=0)
 
     def config_label(self):  # Labels
         tk.Label(self.insert_datos, text="Nombre: ").place(x=10, y=10, width=100, height=20)
         tk.Label(self.insert_datos, text="Apellido: ").place(x=10, y=40, width=100, height=20)
-        tk.Label(self.insert_datos, text="Fecha Ingreso: ").place(x=10, y=70, width=100, height=20)
+        tk.Label(self.insert_datos, text="Telefono: ").place(x=10, y=70, width=100, height=20)
+        tk.Label(self.insert_datos, text="Dirección: ").place(x=10, y=100, width=100, height=20)
+        tk.Label(self.insert_datos, text="Email: ").place(x=10, y=130, width=100, height=20)
 
     def config_entry(self):  # Se configuran los inputs
         self.entry_nombre = tk.Entry(self.insert_datos)
-        self.entry_nombre.place(x=110, y=10, width=80, height=20)
+        self.entry_nombre.place(x=110, y=10, width=200, height=20)
         self.entry_nombre.insert(0,self.row_data[1])
         self.entry_apellido = tk.Entry(self.insert_datos)
-        self.entry_apellido.place(x=110, y=40, width=80, height=20)
+        self.entry_apellido.place(x=110, y=40, width=200, height=20)
         self.entry_apellido.insert(0,self.row_data[2])
-        self.entry_fecha = tk.Entry(self.insert_datos)
-        self.entry_fecha.place(x=110, y=70, width=80, height=20)
-        self.entry_fecha.insert(0,self.row_data[3])
+        self.entry_telefono = tk.Entry(self.insert_datos)
+        self.entry_telefono.place(x=110, y=70, width=200, height=20)
+        self.entry_telefono.insert(0,self.row_data[3])
+        self.entry_direccion = tk.Entry(self.insert_datos)
+        self.entry_direccion.place(x=110, y=100, width=200, height=20)
+        self.entry_direccion.insert(0,self.row_data[4])
+        self.entry_email = tk.Entry(self.insert_datos)
+        self.entry_email.place(x=110, y=130, width=200, height=20)
+        self.entry_email.insert(0,self.row_data[5])
+
 
     def config_button(self):  # Botón aceptar, llama a la función modificar cuando es clickeado.
         tk.Button(self.insert_datos, text="Aceptar",
-                  command=self.modificar).place(x=0, y=100, width=200, height=20)
+                  command=self.modificar).place(x=50, y=160, width=200, height=20)
 
     def modificar(self):  # Insercion en la base de datos.
-        sql = """update medico set nom_med = %(nom_med)s, ape_med = %(ape_med)s,
-            fecha_ingreso = %(fecha_ingreso)s where id_medico = %(id_medico)s"""
-        self.db.run_sql(sql, {"nom_med": self.entry_nombre.get(), "fecha_ingreso": self.entry_fecha.get(),
-                              "ape_med": self.entry_apellido.get(), "id_medico": int(self.row_data[0])})
+        sql = """update dueno set nom_due = %(nom_due)s, ape_due = %(ape_due)s,
+            telefono = %(telefono)s, direccion = %(direccion)s, email = %(email)s where id_dueno = %(id_dueno)s"""
+        self.db.run_sql(sql, {"nom_due": self.entry_nombre.get(), "direccion": self.entry_direccion.get(),
+                              "ape_due": self.entry_apellido.get(), "email": self.entry_email.get(),
+                              "telefono": int(self.entry_telefono.get()), "id_dueno": int(self.row_data[0])})
         self.insert_datos.destroy()
         self.padre.llenar_treeview()
 

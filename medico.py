@@ -98,11 +98,11 @@ class insertar_medico:
 
     def __config_entry(self):
         self.entry_nombre = tk.Entry(self.insert_datos)
-        self.entry_nombre.place(x=110, y=10, width=80, height=20)
+        self.entry_nombre.place(x=110, y=10, width=90, height=20)
         self.entry_apellido = tk.Entry(self.insert_datos)
-        self.entry_apellido.place(x=110, y=40, width=80, height=20)
+        self.entry_apellido.place(x=110, y=40, width=90, height=20)
         self.entry_fecha = tk.Entry(self.insert_datos)
-        self.entry_fecha.place(x=110, y=70, width=80, height=20)
+        self.entry_fecha.place(x=110, y=70, width=90, height=20)
 
     def __config_button(self):
         tk.Button(self.insert_datos, text="Aceptar",
@@ -131,7 +131,7 @@ class modificar_medico:
         self.config_button()
 
     def config_window(self):  # Settings
-        self.insert_datos.geometry('200x120')
+        self.insert_datos.geometry('250x120')
         self.insert_datos.title("Modificar Medico")
         self.insert_datos.resizable(width=0, height=0)
 
@@ -142,13 +142,13 @@ class modificar_medico:
 
     def config_entry(self):  # Se configuran los inputs
         self.entry_nombre = tk.Entry(self.insert_datos)
-        self.entry_nombre.place(x=110, y=10, width=80, height=20)
+        self.entry_nombre.place(x=110, y=10, width=90, height=20)
         self.entry_nombre.insert(0,self.row_data[1])
         self.entry_apellido = tk.Entry(self.insert_datos)
-        self.entry_apellido.place(x=110, y=40, width=80, height=20)
+        self.entry_apellido.place(x=110, y=40, width=90, height=20)
         self.entry_apellido.insert(0,self.row_data[2])
         self.entry_fecha = tk.Entry(self.insert_datos)
-        self.entry_fecha.place(x=110, y=70, width=80, height=20)
+        self.entry_fecha.place(x=110, y=70, width=90, height=20)
         self.entry_fecha.insert(0,self.row_data[3])
 
     def config_button(self):  # Botón aceptar, llama a la función modificar cuando es clickeado.
