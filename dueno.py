@@ -183,6 +183,7 @@ class modificar:
         self.db.run_sql(sql, {"nom_due": self.entry_nombre.get(), "direccion": self.entry_direccion.get(),
                               "ape_due": self.entry_apellido.get(), "email": self.entry_email.get(),
                               "telefono": int(self.entry_telefono.get()), "id_dueno": int(self.row_data[0])})
+
         self.insert_datos.destroy()
         self.padre.llenar_treeview()
 

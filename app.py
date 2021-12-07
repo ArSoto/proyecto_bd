@@ -10,6 +10,7 @@ from graficos import graficos
 from medico import medico
 from dueno import dueno
 #from jaula import jaula
+from mascota import mascota
 
 class App: 
     def __init__(self, db):
@@ -77,9 +78,13 @@ class App:
         b3.grid(row=3, column=0, padx=padx, pady=pady)
         b3.bind('<Button-1>', self.__mostrar_duenos)
 
+        b3 = Button(frame, text="Mascotas", width=20)
+        b3.grid(row=4, column=0, padx=padx, pady=pady)
+        b3.bind('<Button-1>', self.__mostrar_mascotas)
+
         #
         bg = Button(frame, text="Gráfico", width=20)
-        bg.grid(row=5, column=0, padx=padx, pady=pady)
+        bg.grid(row=8, column=0, padx=padx, pady=pady)
         bg.bind('<Button-1>', self.__graficos)
     
     # imagen principal.
@@ -101,9 +106,12 @@ class App:
 
     def __mostrar_duenos(self, button):
         dueno(self.root, self.db)
-    # muestra ventana jugadores.
+
     def __mostrar_medicos(self, button):
         medico(self.root, self.db)
+
+    def __mostrar_mascotas(self, button):
+        mascota(self.root, self.db)
     
     def __graficos(self, button):
         graficos(self.root, self.db)
