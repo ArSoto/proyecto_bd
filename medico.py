@@ -37,9 +37,9 @@ class medico:
     def __config_buttons_medico(self):
         tk.Button(self.root, text="Insertar Medico",
                   command=self.__insertar_medico).place(x=0, y=350, width=200, height=50)
-        tk.Button(self.root, text="Modificar jugador",
+        tk.Button(self.root, text="Modificar Medico",
                   command=self.__modificar_medico).place(x=200, y=350, width=200, height=50)
-        tk.Button(self.root, text="Eliminar jugador",
+        tk.Button(self.root, text="Eliminar Medico",
                   command=self.__eliminar_jugador).place(x=400, y=350, width=200, height=50)
         tk.Button(self.root, text="Ver equipos",
                   command=self.__ver_equipos).place(x=600, y=350, width=100, height=50)
@@ -90,14 +90,14 @@ class insertar_medico:
         self.__config_button()
 
     def __config_window(self):
-        self.insert_datos.geometry('200x120')
-        self.insert_datos.title("Insertar jugador")
+        self.insert_datos.geometry('250x120')
+        self.insert_datos.title("Insertar Medico")
         self.insert_datos.resizable(width=0, height=0)
 
     def __config_label(self):
-        tk.Label(self.insert_datos, text="Nombre: ").place(x=10, y=10, width=80, height=20)
-        tk.Label(self.insert_datos, text="Apellido: ").place(x=10, y=40, width=80, height=20)
-        tk.Label(self.insert_datos, text="Equipo: ").place(x=10, y=70, width=80, height=20)
+        tk.Label(self.insert_datos, text="Nombre: ").place(x=10, y=10, width=90, height=20)
+        tk.Label(self.insert_datos, text="Apellido: ").place(x=10, y=40, width=90, height=20)
+        tk.Label(self.insert_datos, text="Fecha Ingreso ").place(x=10, y=70, width=90, height=20)
 
     def __config_entry(self):
         self.entry_nombre = tk.Entry(self.insert_datos)
@@ -105,7 +105,7 @@ class insertar_medico:
         self.entry_apellido = tk.Entry(self.insert_datos)
         self.entry_apellido.place(x=110, y=40, width=80, height=20)
         self.entry_fecha = tk.Entry(self.insert_datos)
-        self.entry_nombre.place(x=110, y=10, width=80, height=20)
+        self.entry_fecha.place(x=110, y=70, width=80, height=20)
 
 
     def __config_button(self):
@@ -118,10 +118,9 @@ class insertar_medico:
         return [i[1] for i in self.data], [i[0] for i in self.data]
 
     def __insertar(self):  # Insercion en la base de datos.
-        sql = """insert jugador (id_equipo, nom_jugador, ape_jugador) 
-            values (%(id_equipo)s, %(nom_jugador)s, %(ape_jugador)s)"""
-        self.db.run_sql(sql, {"id_equipo": self.ids[self.combo.current()],
-                              "nom_jugador": self.entry_nombre.get(), "ape_jugador": self.entry_apellido.get()})
+        sql = """insert medico (nom_med, ape_med, fecha_ingreso ) 
+            values (%(nom_med)s, %(ape_med)s, %(fecha_ingreso)s)"""
+        self.db.run_sql(sql, {"nom_med": self.entry_nombre.get(), "ape_med": self.entry_apellido.get(), "fecha_ingreso": self.entry_fecha.get() })
         self.insert_datos.destroy()
         self.padre.llenar_treeview_medico()
 
@@ -145,7 +144,7 @@ class modificar_medico:
     def config_label(self):  # Labels
         tk.Label(self.insert_datos, text="Nombre: ").place(x=10, y=10, width=80, height=20)
         tk.Label(self.insert_datos, text="Apellido: ").place(x=10, y=40, width=80, height=20)
-        tk.Label(self.insert_datos, text="fecha in: ").place(x=10, y=70, width=80, height=20)
+        tk.Label(self.insert_datos, text="fecha ingreso: ").place(x=10, y=70, width=80, height=20)
 
     def config_entry(self):  # Se configuran los inputs
         self.entry_nombre = tk.Entry(self.insert_datos)

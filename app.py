@@ -8,7 +8,8 @@ from PIL import Image, ImageTk
 from database import Database
 from graficos import graficos
 from medico import medico
-from equipo import equipo
+#from jaula import jaula
+
 class App: 
     def __init__(self, db):
         self.db = db
@@ -57,17 +58,23 @@ class App:
         frame.place(x=10, y=10, width=200, relheight=0.95) 
         
         # boton medicos menu principal
-        b1 = Button(frame, text="Medicos", width=20)
-        b1.grid(row=0, column=0, padx=padx, pady=pady)
-        b1.bind('<Button-1>', self.__mostrar_medicos)
 
-        b1 = Button(frame, text="Jaulas", width=20)
-        b1.grid(row=0, column=0, padx=padx, pady=pady)
+        b0 = Button(frame, text="Atencion", width=20)
+        b0.grid(row=1, column=0, padx=padx, pady=pady)
+        b0.bind('<Button-1>', self.__mostrar_medicos)
+
+        b1 = Button(frame, text="Medicos", width=20)
+        b1.grid(row=2, column=0, padx=padx, pady=pady)
         b1.bind('<Button-1>', self.__mostrar_medicos)
 
         #
+        b2 = Button(frame, text="Jaulas", width=20)
+        b2.grid(row=3, column=0, padx=padx, pady=pady)
+        b2.bind('<Button-1>', self.__mostrar_medicos)
+
+        #
         bg = Button(frame, text="Gráfico", width=20)
-        bg.grid(row=1, column=0, padx=padx, pady=pady)
+        bg.grid(row=5, column=0, padx=padx, pady=pady)
         bg.bind('<Button-1>', self.__graficos)
     
     # imagen principal.
