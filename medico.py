@@ -116,7 +116,7 @@ class insertar_medico:
         self.db.run_sql(sql, {"nom_med": self.entry_nombre.get(), "ape_med": self.entry_apellido.get(),
                               "fecha_ingreso": self.entry_fecha.get()})
         self.insert_datos.destroy()
-        self.padre.llenar_treeview_medico()
+        self.padre.llenar_treeview()
 
 
 class modificar_medico:
@@ -161,6 +161,6 @@ class modificar_medico:
         self.db.run_sql(sql, {"nom_med": self.entry_nombre.get(), "fecha_ingreso": self.entry_fecha.get(),
                               "ape_med": self.entry_apellido.get(), "id_medico": int(self.row_data[0])})
         self.insert_datos.destroy()
-        self.padre.llenar_treeview_medico()
+        self.padre.llenar_treeview()
 
 

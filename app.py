@@ -8,6 +8,7 @@ from PIL import Image, ImageTk
 from database import Database
 from graficos import graficos
 from medico import medico
+from dueno import dueno
 #from jaula import jaula
 
 class App: 
@@ -72,6 +73,10 @@ class App:
         b2.grid(row=3, column=0, padx=padx, pady=pady)
         b2.bind('<Button-1>', self.__mostrar_medicos)
 
+        b3 = Button(frame, text="Dueños", width=20)
+        b3.grid(row=3, column=0, padx=padx, pady=pady)
+        b3.bind('<Button-1>', self.__mostrar_duenos)
+
         #
         bg = Button(frame, text="Gráfico", width=20)
         bg.grid(row=5, column=0, padx=padx, pady=pady)
@@ -93,7 +98,9 @@ class App:
     # muestra ventana equipos.
     def __mostrar_equipos(self):
         equipo(self.root, self.db)
-    
+
+    def __mostrar_duenos(self, button):
+        dueno(self.root, self.db)
     # muestra ventana jugadores.
     def __mostrar_medicos(self, button):
         medico(self.root, self.db)
