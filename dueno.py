@@ -25,7 +25,7 @@ class dueno:
         self.treeview.configure(columns=("#1", "#2", "#3" , "#4", "#5"))
         self.treeview.heading("#0", text="Id")
         self.treeview.heading("#1", text="Nombre")
-        self.treeview.heading("#2", text="Apellido")
+        self.treeview.heading("#2", text="Apellidos")
         self.treeview.heading("#3", text="Telefono")
         self.treeview.heading("#4", text="Dirección")
         self.treeview.heading("#5", text="Email")
@@ -60,8 +60,8 @@ class dueno:
             self.treeview.delete(*self.treeview.get_children())  # Elimina todos los rows del treeview
             for i in data:
                 self.treeview.insert("", "end", text=i[0],
-                                     values=(i[1] + " " + i[2] + " " + i[3] + " " + i[4]
-                                             + " " + i[5]), iid=i[0], tags="rojo")
+                                     values=(i[1].replace(' ', '\\ ') + " " + i[2].replace(' ', '\\ ') + " " + i[3]
+                                             + " "+i[4].replace(' ', '\\ ') + " " + i[5]), iid=i[0], tags="rojo")
             self.data = data
 
     def __insertar(self):
