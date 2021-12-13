@@ -12,6 +12,7 @@ from dueno import dueno
 from pabellon import pabellon
 from mascota import mascota
 from jaula import jaula
+from servicio import servicio
 
 
 class App:
@@ -73,9 +74,13 @@ class App:
         b3.grid(row=4, column=0, padx=padx, pady=pady)
         b3.bind('<Button-1>', self.__mostrar_duenos)
 
-        b3 = Button(frame, text="Mascotas", width=20)
-        b3.grid(row=5, column=0, padx=padx, pady=pady)
-        b3.bind('<Button-1>', self.__mostrar_mascotas)
+        b4 = Button(frame, text="Mascotas", width=20)
+        b4.grid(row=5, column=0, padx=padx, pady=pady)
+        b4.bind('<Button-1>', self.__mostrar_mascotas)
+
+        b5 = Button(frame, text="Servicio", width=20)
+        b5.grid(row=6, column=0, padx=padx, pady=pady)
+        b5.bind('<Button-1>', self.__mostrar_servicio)
 
         #
         bg = Button(frame, text="Pabellón", width=20)
@@ -110,6 +115,9 @@ class App:
 
     def __mostrar_pabellon(self, button):
         pabellon(self.root, self.db)
+
+    def __mostrar_servicio(self, button):
+        servicio(self.root, self.db)
 
 
 

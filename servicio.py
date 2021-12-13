@@ -6,87 +6,52 @@ class servicio:
     def __init__(self, root, db):
         self.db = db
         self.data = []
+        self.ancho = 600
+        self.alto = 400
+        self.__ancho = self.ancho / 10
+        self.__alto = self.alto / 10
 
         # Toplevel es una ventana que está un nivel arriba que la principal
         self.root = tk.Toplevel()
-        self.root.geometry('1200x400')
+        self.root.geometry('%dx%d' % (self.ancho, self.alto))
         self.root.title("Servicio")
         self.root.resizable(width=0, height=0)
 
         # toplevel modal
         self.root.transient(root)
 
-        #
-        self.__config_treeview()
+        # llama a los botones
         self.__config_buttons()
 
-    def __config_treeview(self):
-        self.treeview = ttk.Treeview(self.root)
-        self.treeview.configure(columns=("#1", "#2", "#3", "#4", "#5", "#6", "#7", "#8"))
-        self.treeview.heading("#0", text="Id")
-        self.treeview.heading("#1", text="Mascota")
-        self.treeview.heading("#2", text="Peso")
-        self.treeview.heading("#3", text="Fecha")
-        self.treeview.heading("#4", text="Diagnostico")
-        self.treeview.heading("#5", text="Medico")
-        self.treeview.heading("#6", text="Jaula")
-        self.treeview.heading("#7", text="Pabellón")
-
-
-        self.treeview.column("#0", minwidth=30, width=30, stretch=False)
-        self.treeview.column("#1", minwidth=200, width=200, stretch=False)
-        self.treeview.column("#2", minwidth=200, width=200, stretch=False)
-        self.treeview.column("#3", minwidth=100, width=200, stretch=False)
-        self.treeview.column("#4", minwidth=100, width=300, stretch=False)
-        self.treeview.column("#5", minwidth=400, width=300, stretch=False)
-        self.treeview.column("#6", minwidth=400, width=300, stretch=False)
-        self.treeview.column("#7", minwidth=400, width=300, stretch=False)
-
-        self.treeview.place(x=0, y=0, height=350, width=1199)
-        self.llenar_treeview()
-        self.root.after(0, self.llenar_treeview)
-
     def __config_buttons(self):
-        tk.Button(self.root, text="Insertar Servicio",
-                  command=self.__insertar).place(x=0, y=350, width=200, height=50)
-        tk.Button(self.root, text="Modificar Servicio",
-                  command=self.__modificar).place(x=200, y=350, width=200, height=50)
-        tk.Button(self.root, text="Eliminar Servicio",
-                  command=self.__eliminar).place(x=400, y=350, width=200, height=50)
 
-    # select  a la base de datos para obtener id, nombre, apellido, fecha ingreso del medico
-    def llenar_treeview(self):
-        sql = """"""
-        # obtiene los datos
-        data = self.db.run_select(sql)
-        print(data)
+        tk.Button(self.root, text="Ingresar",
+                  command=self.__insertar).place(x=2*self.__ancho, y=1*self.__alto, width=2*self.__ancho, height=2*self.__alto)
+        tk.Button(self.root, text="Buscar",
+                  command=self.__insertar).place(x=6*self.__ancho, y=1*self.__alto, width=2*self.__ancho, height=2*self.__alto)
+        tk.Button(self.root, text="Eliminar",
+                  command=self.__insertar).place(x=2*self.__ancho, y=4*self.__alto, width=2*self.__ancho, height=2*self.__alto)
+        tk.Button(self.root, text="Ver Todo",
+                  command=self.__insertar).place(x=6*self.__ancho, y=4*self.__alto, width=2*self.__ancho, height=2*self.__alto)
+        tk.Button(self.root, text="Volver Atrás",
+                  command=self.__insertar).place(x=4*self.__ancho, y=7*self.__alto, width=2*self.__ancho, height=2*self.__alto)
 
-        if (data != self.data):
-            self.treeview.delete(*self.treeview.get_children())  # Elimina todos los rows del treeview
-            for i in data:
-                self.treeview.insert("", "end", text=i[0],
-                                     values=(i[1].replace(" ", "\\ ") + " " + i[2] + " " + i[3].replace(" ", "\\ ") +
-                                             " " + i[4].replace(" ", "\\ ") + " " + i[5]), iid=i[0], tags="rojo")
 
-            self.data = data
 
     def __insertar(self):
         insertar(self.db, self)
 
     def __modificar(self):
-        if (self.treeview.focus() != ""): #id, nombre, especie, dueño, descripcion, fecha
+        if (self.treeview.focus() != ""):  # id, nombre, especie, dueño, descripcion, fecha
             sql = """select mascota.id_mascota, mascota.nom_masc, especie.nom_esp, concat( dueno.nom_due,' ', 
             dueno.ape_due) as nombre , mascota.descrip_masc, date_format(mascota.fecha_nacimiento, "%Y-%m-%d")
             from mascota join dueno on mascota.id_dueno = dueno.id_dueno
             join especie  on mascota.id_especie = especie.id_especie where mascota.id_mascota = %(id_mascota)s;"""
 
-            row_data = self.db.run_select_filter(sql, {"id_mascota": self.treeview.focus()})[0]
-            modificar(self.db, self, row_data)
 
     def __eliminar(self):
         sql = "delete from mascota where id_mascota = %(id_mascota)s"
-        self.db.run_sql(sql, {"id_mascota": self.treeview.focus()})
-        self.llenar_treeview()
+
 
 
 class insertar:
@@ -100,23 +65,51 @@ class insertar:
         self.__config_button()
 
     def __config_window(self):
-        self.insert_datos.geometry('400x200')
+        self.insert_datos.geometry('1200x600')
         self.insert_datos.title("Insertar Mascota")
         self.insert_datos.resizable(width=0, height=0)
 
+        separator = ttk.Separator(self.insert_datos, orient='vertical')
+        separator.place(relx=0.47, rely=0, relwidth=0.2, relheight=1)
+
+
     def __config_label(self):#id, nombre, especie, dueño, descripcion, fecha
-        tk.Label(self.insert_datos, text="Nombre: ").place(x=10, y=10, width=150, height=20)
-        tk.Label(self.insert_datos, text="Especie: ").place(x=10, y=40, width=150, height=20)
-        tk.Label(self.insert_datos, text="Dueño: ").place(x=10, y=70, width=150, height=20)
-        tk.Label(self.insert_datos, text="Descripción: ").place(x=10, y=100, width=150, height=20)
-        tk.Label(self.insert_datos, text="Fecha Nacimiento: ").place(x=10, y=130, width=150, height=20)
+
+        padx = 20
+        pady = 2
+
+        self.insert_datos.grid_columnconfigure(10, minsize=200)
+
+        tk.Label(self.insert_datos, text="DATOS MASCOTA", font=("helvetica 12 bold")).grid(row=0, column=0, padx=padx,pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t\t").grid(row=0, column=2, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t").grid(row=0, column=3, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t").grid(row=0, column=4, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t").grid(row=0, column=5, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t").grid(row=0, column=6, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t").grid(row=0, column=7, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t").grid(row=0, column=8, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t").grid(row=0, column=9, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="\t").grid(row=0, column=10, padx=padx, pady=pady, sticky="W")
+
+        tk.Label(self.insert_datos, text="  Mascota: ").grid(row=1, column=0, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="  Peso: ").grid(row=2, column=0, padx=padx, pady=pady, sticky="W")
+
+        tk.Label(self.insert_datos, text="Nombre: ").grid(row=1, column= 5, padx = padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Especie: ").grid(row=2, column=5, padx = padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Dueño: ").grid(row=3, column=5, padx = padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Descripción: ").grid(row=4, column=5, padx = padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Fecha Nacimiento: ").grid(row=5, column=5, padx = padx, pady=pady, sticky="W")
 
     def __config_entry(self):
+
+        padx = 10
+        pady = 2
+
         self.entry_nombre = tk.Entry(self.insert_datos)
         self.entry_nombre.place(x=160, y=10, width=200, height=20)
-        self.combo_especie = ttk.Combobox(self.insert_datos)
-        self.combo_especie.place(x=160, y=40, width=200, height=20)
-        self.combo_especie["values"], self.id_esp = self.__fill_combo_especie()
+        self.combo_mascota = ttk.Combobox(self.insert_datos)
+        self.combo_mascota.grid(row=1, column=0, pady=pady, padx=padx)
+        self.combo_mascota["values"], self.id_esp = self.__fill_combo_mascota()
         self.combo_dueno = ttk.Combobox(self.insert_datos)
         self.combo_dueno.place(x=160, y=70, width=200, height=20)
         self.combo_dueno["values"], self.id_due = self.__fill_combo_dueno()
@@ -132,14 +125,15 @@ class insertar:
     def __insertar(self):  # Insercion en la base de datos.
         sql = """insert into mascota (nom_masc, id_especie, id_dueno, descrip_masc, fecha_nacimiento ) 
             values (%(nom_mascota)s, %(id_especie)s, %(id_dueno)s, %(descrip_masc)s, %(fecha)s)"""
-        self.db.run_sql(sql, {"nom_mascota": self.entry_nombre.get(), "id_especie": self.id_esp[self.combo_especie.current()],
+        self.db.run_sql(sql, {"nom_mascota": self.entry_nombre.get(), "id_especie": self.id_esp[self.combo_mascota.current()],
                               "id_dueno": self.id_due[self.combo_dueno.current()], "descrip_masc": self.entry_descripcion.get(),
                               "fecha": self.entry_fecha.get()})
         self.insert_datos.destroy()
         self.padre.llenar_treeview()
 
-    def __fill_combo_especie(self):
-        sql = "select id_especie, nom_esp from especie"
+    def __fill_combo_mascota(self):
+        sql = "select m.id_mascota, concat(m.nom_masc,', Dueño: ', nom_due, ' ', ape_due) from mascota m " \
+              "join dueno d on m.id_dueno = d.id_dueno;"
         self.data = self.db.run_select(sql)
         return [i[1] for i in self.data], [i[0] for i in self.data]
 
@@ -215,5 +209,3 @@ class modificar:
         sql = "select id_dueno, concat(dueno.nom_due, ' ' , dueno.ape_due) as nombre from dueno;"
         self.data = self.db.run_select(sql)
         return [i[1] for i in self.data], [i[0] for i in self.data]
-
-
