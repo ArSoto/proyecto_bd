@@ -170,15 +170,12 @@ class insertar:
             self.db.run_sql(sql_ser, {"id_mas": self.id_masc[self.combo_mascota.current()],
                                       "peso": float(self.entry_peso.get())})
 
-            id_servicio = self.db.run_select("select max(id_servicio) from servicio")
-            print(id_servicio[0])
 
-            sql_realiza = """insert into realizado_por(id_servicio, id_medico) VALUES (%(id_ser)s, %(id_med)s) """
-            self.db.run_sql(sql_realiza, {"id_med": self.id_med[self.combo_medico.current()], "id_ser": id_servicio })
+            sql_realiza = """call pr_insert_realizado(%(id_med)s, %(id_diag)s, %(obs)s) """
+            self.db.run_sql(sql_realiza, {"id_med": self.id_med[self.combo_medico.current()],
+                                          "id_diag": self.id_diag[self.combo_diagnostico.current()],
+                                          "obs": self.entry_observaciones.get()})
 
-            sql_causa = """insert into causa (id_diag, id_servicio, observaciones) VALUES (%(id_diag)s, %(id_ser)s, %(obs)s) """
-            self.db.run_sql(sql_causa, {"id_diag" : self.id_diag[self.combo_diagnostico.current()], "id_ser": id_servicio,
-                                        "obs": self.entry_observaciones})
 
             self.insert_datos.destroy()
 
