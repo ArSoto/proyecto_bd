@@ -62,54 +62,54 @@ class insertar:
         self.__config_window()
         self.__config_label()
         self.__config_entry()
-        self.__config_button()
+        self.__checkBotton()
+
+        self.var_jaula = tk.IntVar()
+        #self.__config_button()
 
     def __config_window(self):
-        self.insert_datos.geometry('1200x600')
+        self.insert_datos.geometry('500x600')
         self.insert_datos.title("Insertar Mascota")
         self.insert_datos.resizable(width=0, height=0)
-
-        separator = ttk.Separator(self.insert_datos, orient='vertical')
-        separator.place(relx=0.40, rely=0, relwidth=0, relheight=2)
 
     def __config_label(self):  # id, nombre, especie, dueño, descripcion, fecha
 
         padx = 2
-        pady = 2
+        pady = 5
 
         self.insert_datos.grid_columnconfigure(10, minsize=100)
 
         tk.Label(self.insert_datos, text="DATOS MASCOTA", font=("helvetica 9 bold")).grid(row=0, column=0, padx=padx,
-                                                                                          pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t\t").grid(row=0, column=2, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t").grid(row=1, column=3, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t").grid(row=2, column=4, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t").grid(row=3, column=5, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t").grid(row=4, column=6, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t").grid(row=5, column=7, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t").grid(row=6, column=8, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t").grid(row=0, column=9, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="\t").grid(row=0, column=10, padx=padx, pady=pady, sticky="W")
-
+                                                                                          pady=pady, columnspan=2,sticky="NW")
         tk.Label(self.insert_datos, text="  Mascota: ").grid(row=1, column=0, padx=padx, pady=pady, sticky="W")
         tk.Label(self.insert_datos, text="  Peso: ").grid(row=2, column=0, padx=padx, pady=pady, sticky="W")
         tk.Label(self.insert_datos, text="DIAGNÓSTICO", font=("helvetica 9 bold")).grid(row=3, column=0, padx=padx,
-                                                                                        pady=pady, sticky="W")
+                                                                                        pady=pady, columnspan=2, sticky="NW")
         tk.Label(self.insert_datos, text="  Nombre: ").grid(row=4, column=0, padx=padx, pady=pady, sticky="W")
         tk.Label(self.insert_datos, text="  Observaciones: ").grid(row=5, column=0, padx=padx, pady=pady, sticky="W")
         tk.Label(self.insert_datos, text="MÉDICO", font=("helvetica 9 bold")).grid(row=6, column=0, padx=padx,
-                                                                                   pady=pady, sticky="W")
+                                                                                   pady=pady, columnspan=2, sticky="NW")
         tk.Label(self.insert_datos, text="  Nombre: ").grid(row=7, column=0, padx=padx, pady=pady, sticky="W")
         tk.Label(self.insert_datos, text="USO DE INSTALACIONES", font=("helvetica 9 bold")).grid(row=8, column=0,
-                                                                                   pady=pady, rowspan=2, sticky="W")
+                                                                                   pady=pady, columnspan=2, sticky="NW")
+        tk.Label(self.insert_datos, text="Tipo de Jaula :").grid(row=10, column=0, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Fecha :").grid(row=11, column=0, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Cantidad de dias:").grid(row=12, column=0, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Tipo dd pabelLon:").grid(row=15, column=0, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Fecha :").grid(row=16, column=0, padx=padx, pady=pady, sticky="W")
 
-       # tk.Label(self.insert_datos, text="Nombre: ").grid(row=1, column=5, padx=padx, pady=pady, sticky="W")
-        #tk.Label(self.insert_datos, text="Especie: ").grid(row=2, column=5, padx=padx, pady=pady, sticky="W")
-        #tk.Label(self.insert_datos, text="Dueño: ").grid(row=3, column=5, padx=padx, pady=pady, sticky="W")
-        #tk.Label(self.insert_datos, text="Descripción: ").grid(row=4, column=5, padx=padx, pady=pady, sticky="W")
-        #tk.Label(self.insert_datos, text="Fecha Nacimiento: ").grid(row=5, column=5, padx=padx, pady=pady, sticky="W")
+    def __checkBotton(self):
+
+        var_jaula = tk.IntVar()
+        var_pabellon = tk.IntVar()
+
+        chk_jaula = tk.Checkbutton(self.insert_datos, text=' Uso de Jaula', variable=var_jaula, onvalue=1)
+        chk_jaula.grid(row=9, column=0, pady=5, padx=2, sticky="SW")
+        chk_pabellon = tk.Checkbutton(self.insert_datos, text=' Uso de Jaula', variable=var_pabellon, onvalue=1)
+        chk_pabellon.grid(row=13, column=0, pady=5, padx=2, sticky="SW")
 
     def __config_entry(self):
+
         padx = 2
         pady = 2
 
@@ -121,16 +121,24 @@ class insertar:
         self.combo_diagnostico = ttk.Combobox(self.insert_datos)
         self.combo_diagnostico.grid(row=4, column=1, pady=pady, padx=padx, sticky="W")
         self.combo_diagnostico["values"], self.id_esp = self.__fill_combo_diagnostico()
-        self.combo_medico = ttk.Combobox(self.insert_datos)
         self.entry_observaciones = tk.Entry(self.insert_datos)
         self.entry_observaciones.grid(row=5, column=1, pady=pady, padx=padx, ipadx=90, sticky="W")
+        self.combo_medico = ttk.Combobox(self.insert_datos)
         self.combo_medico.grid(row=7, column=1, pady=pady, padx=padx, sticky="W")
         self.combo_medico["values"], self.id_esp = self.__fill_combo_medico()
+        self.combo_jaula = ttk.Combobox(self.insert_datos)
+        self.combo_jaula.grid(row=10, column=1, pady=pady, padx=padx, sticky="W")
+        self.combo_jaula["values"], self.id_esp = self.__fill_combo_jaula()
+        self.entry_jaula_fecha = tk.Entry(self.insert_datos)
+        self.entry_jaula_fecha.grid(row=11, column=1, pady=pady, padx=padx, sticky="W")
+        self.entry_jaula_dias = tk.Entry(self.insert_datos)
+        self.entry_jaula_dias.grid(row=12, column=1, pady=pady, padx=padx, sticky="W")
+        self.combo_pabellon = ttk.Combobox(self.insert_datos)
+        self.combo_pabellon.grid(row=15, column=1, pady=pady, padx=padx, sticky="W")
+        self.combo_pabellon["values"], self.id_esp = self.__fill_combo_pabellon()
+        self.entry_pabellon_fecha = tk.Entry(self.insert_datos)
+        self.entry_pabellon_fecha.grid(row=16, column=1, pady=pady, padx=padx, ipadx=90, sticky="W")
 
-
-    def __config_button(self):
-        tk.Button(self.insert_datos, text="Aceptar",
-                  command=self.__insertar).place(x=160, y=160, width=200, height=20)
 
     def __insertar(self):  # Insercion en la base de datos.
         sql = """insert into mascota (nom_masc, id_especie, id_dueno, descrip_masc, fecha_nacimiento ) 
@@ -140,6 +148,7 @@ class insertar:
                               "id_dueno": self.id_due[self.combo_dueno.current()],
                               "descrip_masc": self.entry_descripcion.get(),
                               "fecha": self.entry_fecha.get()})
+
         self.insert_datos.destroy()
         self.padre.llenar_treeview()
 
@@ -156,6 +165,16 @@ class insertar:
 
     def __fill_combo_diagnostico(self):
         sql = "select id_diag, nom_diag from diagnostico;"
+        self.data = self.db.run_select(sql)
+        return [i[1] for i in self.data], [i[0] for i in self.data]
+
+    def __fill_combo_jaula(self):
+        sql = "select id_jaula, descripcion from jaula;"
+        self.data = self.db.run_select(sql)
+        return [i[1] for i in self.data], [i[0] for i in self.data]
+
+    def __fill_combo_pabellon(self):
+        sql = "select id_pabellon, descripcion from pabellon;"
         self.data = self.db.run_select(sql)
         return [i[1] for i in self.data], [i[0] for i in self.data]
 
