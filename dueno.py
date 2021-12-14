@@ -69,8 +69,7 @@ class dueno:
 
     def __modificar(self):
         if (self.treeview.focus() != ""):
-            sql = """select id_dueno, nom_due,ape_due,convert( telefono, char), direccion, email 
-        from dueno;"""
+            sql = """select id_dueno, nom_due,ape_due,convert( telefono, char), direccion, email from dueno;"""
 
             row_data = self.db.run_select_filter(sql, {"id_due": self.treeview.focus()})[0]
             modificar(self.db, self, row_data)
@@ -145,7 +144,7 @@ class modificar:
 
     def config_window(self):  # Settings
         self.insert_datos.geometry('350x200')
-        self.insert_datos.title("Modificar Medico")
+        self.insert_datos.title("Modificar Dueño")
         self.insert_datos.resizable(width=0, height=0)
 
     def config_label(self):  # Labels

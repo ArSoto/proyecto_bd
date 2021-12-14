@@ -13,6 +13,7 @@ from pabellon import pabellon
 from mascota import mascota
 from jaula import jaula
 from servicio import servicio
+from especie import especie
 
 
 class App:
@@ -78,8 +79,12 @@ class App:
         b4.grid(row=5, column=0, padx=padx, pady=pady)
         b4.bind('<Button-1>', self.__mostrar_mascotas)
 
+        b9 = Button(frame, text="Especies", width=20)
+        b9.grid(row=6, column=0, padx=padx, pady=pady)
+        b9.bind('<Button-1>', self.__mostrar_especies)
+
         b5 = Button(frame, text="Servicio", width=20)
-        b5.grid(row=6, column=0, padx=padx, pady=pady)
+        b5.grid(row=7, column=0, padx=padx, pady=pady)
         b5.bind('<Button-1>', self.__mostrar_servicio)
 
         #
@@ -112,6 +117,9 @@ class App:
 
     def __mostrar_jaulas(self, button):
         jaula(self.root, self.db)
+
+    def __mostrar_especies(self, button):
+        especie(self.root, self.db)
 
     def __mostrar_pabellon(self, button):
         pabellon(self.root, self.db)

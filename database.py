@@ -21,7 +21,7 @@ class Database:
         except mysql.connector.Error as err:#Si no resulta, avisa
             print("No se pueden obtener los datos")
             print(err)
-        return result#Retorna result
+        return result  #Retorna result
     
     def run_select_filter(self, sql, params):
         try:
