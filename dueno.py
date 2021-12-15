@@ -69,7 +69,8 @@ class dueno:
 
     def __modificar(self):
         if (self.treeview.focus() != ""):
-            sql = """select id_dueno, nom_due,ape_due,convert( telefono, char), direccion, email from dueno;"""
+            sql = """select id_dueno, nom_due,ape_due,convert( telefono, char), direccion, email from dueno
+             where id_dueno = %(id_due)s;"""
 
             row_data = self.db.run_select_filter(sql, {"id_due": self.treeview.focus()})[0]
             modificar(self.db, self, row_data)

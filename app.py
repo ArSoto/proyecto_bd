@@ -12,8 +12,10 @@ from dueno import dueno
 from pabellon import pabellon
 from mascota import mascota
 from jaula import jaula
-from servicio import servicio
+from serviciocopia import servicio
+#from servicio import servicio
 from especie import especie
+from histogram import histogram
 
 
 class App:
@@ -53,7 +55,7 @@ class App:
         pady = 2
 
         #
-        frame = LabelFrame(self.root, text="Menú Princpal", relief=tk.GROOVE)
+        frame = LabelFrame(self.root, text="Menú Principal", relief=tk.GROOVE)
         frame.place(x=10, y=10, width=200, relheight=0.95)
 
         # boton medicos menu principal
@@ -84,13 +86,17 @@ class App:
         b9.bind('<Button-1>', self.__mostrar_especies)
 
         b5 = Button(frame, text="Servicio", width=20)
-        b5.grid(row=7, column=0, padx=padx, pady=pady)
+        b5.grid(row=10, column=0, padx=padx, pady=pady)
         b5.bind('<Button-1>', self.__mostrar_servicio)
 
         #
         bg = Button(frame, text="Pabellón", width=20)
-        bg.grid(row=8, column=0, padx=padx, pady=pady)
+        bg.grid(row=7, column=0, padx=padx, pady=pady)
         bg.bind('<Button-1>', self.__mostrar_pabellon)
+
+        b10 = Button(frame, text="Histograma", width=20)
+        b10.grid(row=11, column=0, padx=padx, pady=pady)
+        b10.bind('<Button-1>', self.__mostrar_histograma)
 
     # imagen principal.
     def __agrega_imagen_principal(self):
@@ -126,6 +132,9 @@ class App:
 
     def __mostrar_servicio(self, button):
         servicio(self.root, self.db)
+
+    def __mostrar_histograma(self, button):
+        histogram(self.root, self.db)
 
 
 

@@ -63,7 +63,7 @@ class insertar:
         self.__config_window()
         self.__config_label()
         self.__config_entry()
-        self.__checkBotton()
+        #self.__checkBotton()
         self.__config_button()
 
     def __config_window(self):
@@ -98,20 +98,23 @@ class insertar:
         tk.Label(self.insert_datos, text="Tipo de Jaula :").grid(row=10, column=0, padx=padx, pady=pady, sticky="W")
         tk.Label(self.insert_datos, text="Fecha :").grid(row=11, column=0, padx=padx, pady=pady, sticky="W")
         tk.Label(self.insert_datos, text="Cantidad de dias:").grid(row=12, column=0, padx=padx, pady=pady, sticky="W")
-        tk.Label(self.insert_datos, text="Tipo dd pabelLon:").grid(row=15, column=0, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Tipo de pabelLon:").grid(row=15, column=0, padx=padx, pady=pady, sticky="W")
         tk.Label(self.insert_datos, text="Fecha :").grid(row=16, column=0, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Jaula", font="helvetica 9 bold").grid(row=9, column=0, padx=padx, pady=pady, sticky="W")
+        tk.Label(self.insert_datos, text="Pabellón", font="helvetica 9 bold").grid(row=13, column=0, padx=padx, pady=pady,
+                                                                                sticky="W")
 
         tk.Label(self.insert_datos, text="\n").grid(row=16, column=0, padx=padx, pady=pady,
                                                     ipady=10)  # row vacio para generar espacio
 
     def __checkBotton(self):
-        var_jaula = tk.IntVar()
-        var_pabellon = tk.IntVar()
+        self.var_jaula = tk.IntVar()
+        self.var_pabellon = tk.IntVar()
 
-        chk_jaula = tk.Checkbutton(self.insert_datos, text=' Uso de Jaula', variable=var_jaula, onvalue=1)
-        chk_jaula.grid(row=9, column=0, pady=5, padx=2, sticky="SW")
-        chk_pabellon = tk.Checkbutton(self.insert_datos, text=' Uso de Jaula', variable=var_pabellon, onvalue=1)
-        chk_pabellon.grid(row=13, column=0, pady=5, padx=2, sticky="SW")
+        self.chk_jaula = tk.Checkbutton(self.insert_datos, text=' Uso de Jaula', variable=self.var_jaula, onvalue=1)
+        self.chk_jaula.grid(row=9, column=0, pady=5, padx=2, sticky="SW")
+        self.chk_pabellon = tk.Checkbutton(self.insert_datos, text=' Uso de Jaula', variable=self.var_pabellon, onvalue=1)
+        self.chk_pabellon.grid(row=13, column=0, pady=5, padx=2, sticky="SW")
 
     def __config_entry(self):
         padx = 2
@@ -141,7 +144,7 @@ class insertar:
         self.combo_pabellon.grid(row=15, column=1, pady=pady, padx=padx, sticky="W")
         self.combo_pabellon["values"], self.id_pab = self.__fill_combo_pabellon()
         self.entry_pabellon_fecha = tk.Entry(self.insert_datos)
-        self.entry_pabellon_fecha.grid(row=16, column=1, pady=pady, padx=padx, ipadx=90, sticky="W")
+        self.entry_pabellon_fecha.grid(row=16, column=1, pady=pady, padx=padx, sticky="W")
 
     def __config_button(self):
         pady = 2
@@ -151,10 +154,8 @@ class insertar:
                   command=self.__insertar).grid(row=18, column=1, padx=padx, pady=pady, sticky="W")
 
     def __insertar(self):  # Insercion en la base de datos.
-
         vacio1 = ""  # variable para verificar que los tk.Entry no están vacíos
         vacio2 = -1  # variable para verificar que los tk.combobox no están vacíos
-
         if self.combo_mascota.current() == vacio2:
             self.__popup_error("Se debe seleccionar una mascota ")
         elif self.entry_peso.get() == vacio1:
@@ -165,22 +166,32 @@ class insertar:
             self.__popup_error("Se debe ingresar observaciones ")
         elif self.combo_medico.current() == vacio2:
             self.__popup_error("Se debe seleccionar un diagnóstico ")
+
         else:
             sql_ser = """insert into servicio(hora, id_mascota, peso) VALUES (now(), %(id_mas)s, %(peso)s) """
             self.db.run_sql(sql_ser, {"id_mas": self.id_masc[self.combo_mascota.current()],
-                                      "peso": float(self.entry_peso.get())})
+                                      "peso": self.entry_peso.get()})
 
 
             sql_realiza = """call pr_insert_realizado(%(id_med)s, %(id_diag)s, %(obs)s) """
-            self.db.run_sql(sql_realiza, {"id_med": self.id_med[self.combo_medico.current()],
-                                          "id_diag": self.id_diag[self.combo_diagnostico.current()],
-                                          "obs": self.entry_observaciones.get()})
+            captura = self.db.run_sql(sql_realiza, {"id_med": self.id_med[self.combo_medico.current()],
+                                                     "id_diag": self.id_diag[self.combo_diagnostico.current()],
+                                                     "obs": self.entry_observaciones.get()})
+
+
+            self.__popup_ingreso()
+
+
+
 
 
             self.insert_datos.destroy()
-
     def __popup_error(self, error):
         tk.messagebox.showerror("Error al ingresar datos", error)
+
+    def __popup_ingreso(self, ):
+
+        tk.messagebox.showinfo("Aviso", "Datos ingresados exitosamente")
 
 
     def __fill_combo_mascota(self):
@@ -223,7 +234,7 @@ class modificar:
 
     def config_window(self):  # Settings
         self.insert_datos.geometry('400x200')
-        self.insert_datos.title("Modificar Datos de Mascota")
+        self.insert_datos.title("Modificar Datos de Servicio")
         self.insert_datos.resizable(width=0, height=0)
 
     def config_label(self):  # Labels id, nombre, especie, dueño, descripcion, fecha
